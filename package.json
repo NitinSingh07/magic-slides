@@ -6,22 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "link:./node_modules/next/dist/compiled/react",
+      "react-dom": "link:./node_modules/next/dist/compiled/react-dom"
+    }
   },
   "dependencies": {
+    "googleapis": "^164.1.0",
+    "langchain": "^1.0.1",
+    "next": "15.5.6",
+    "next-auth": "^4.24.11",
+    "openai": "^6.6.0",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.6"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
+    "@tailwindcss/postcss": "^4.1.15",
+    "@types/node": "20.19.23",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "9.38.0",
     "eslint-config-next": "15.5.6",
-    "@eslint/eslintrc": "^3"
+    "typescript": "5.9.3"
   }
 }
