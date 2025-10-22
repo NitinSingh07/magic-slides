@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Email Classification Application
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+This is a Next.js application designed to fetch emails from Gmail, classify them using OpenAI's API, and display them in a user-friendly interface. It allows users to log in with their Google account, specify the number of emails to retrieve, and view email classifications (Important, Marketing, Spam).
+
+## Features
+
+- **Google Authentication:** Secure login using NextAuth.js with Google Provider.
+- **Gmail Integration:** Fetches emails from the user's Gmail account.
+- **OpenAI Email Classification:** Classifies fetched emails into "Important", "Marketing", or "Spam" categories using the OpenAI GPT-4o model.
+- **Dynamic Email Display:** Users can select the number of emails (10, 20, 50) to display.
+- **Email List View:** Displays a list of emails with sender, subject, and classification tags.
+- **Email Detail View:** A right-sliding panel to view the full content of a selected email, including its classification.
+- **Responsive UI:** Built with Tailwind CSS for a modern and responsive user experience.
+
+## Setup
+
+Follow these steps to set up the project locally:
+
+### 1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <your-repository-url>
+cd assignement
+```
+
+### 2. Install Dependencies
+
+This project uses `pnpm` as its package manager. If you don't have `pnpm` installed, you can install it globally:
+
+```bash
+npm install -g pnpm
+```
+
+Then, install the project dependencies:
+
+```bash
+pnpm install
+```
+
+### 3. Environment Variables
+
+Create a `.env.local` file in the root of your project and add the following environment variables:
+
+```env
+GOOGLE_CLIENT_ID=YOUR_GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET=YOUR_GOOGLE_CLIENT_SECRET
+NEXTAUTH_SECRET=YOUR_NEXTAUTH_SECRET
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+```
+
+- **`GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`**: Obtain these from the Google Cloud Console by setting up an OAuth 2.0 Client ID for a Web application. Make sure to add `http://localhost:3000/api/auth/callback/google` as an Authorized redirect URI.
+- **`NEXTAUTH_SECRET`**: A random string used to hash tokens, sign/encrypt cookies, and generate cryptographically secure URLs. You can generate a strong secret using `openssl rand -base64 32` or a similar tool.
+- **`OPENAI_API_KEY`**: Obtain your API key from the OpenAI developer platform.
+
+### 4. Run the Development Server
+
+```bash
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Login with Google:** Click the "Login with Google" button to authenticate your Google account.
+2. **Enter OpenAI API Key:** (If prompted, though API calls are server-side now, the input is still present for local storage of a key if needed for other functionality later on).
+3. **Select Number of Emails:** Use the dropdown in the header to choose how many emails you want to fetch (10, 20, or 50).
+4. **Classify Emails:** Click the "Classify" button to analyze your fetched emails using OpenAI.
+5. **View Email Details:** Click on any email in the list to open a side panel displaying its full content and classification.
