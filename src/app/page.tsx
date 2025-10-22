@@ -214,11 +214,11 @@ export default function Home() {
           onClick={() => setSelectedEmail(null)} // Close on outside click
         >
           <div
-            className="p-4 relative"
+            className="p-4 relative h-full"
             onClick={(e) => e.stopPropagation()} // Prevent click from closing popup
           >
             {/* Removed Close button */}
-            <div className="mt-2">
+            <div className="mt-2 flex flex-col h-full">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-bold text-base text-gray-900">
                   {selectedEmail.classification}
@@ -231,7 +231,7 @@ export default function Home() {
               <p className="text-sm text-gray-700 leading-tight mb-2">
                 Subject: {selectedEmail.subject}
               </p>
-              <div className="p-2 border border-black text-sm text-gray-800 whitespace-pre-wrap overflow-y-auto overflow-x-hidden h-[60vh] custom-scrollbar">
+              <div className="text-sm text-gray-800 whitespace-pre-wrap overflow-y-auto overflow-x-hidden custom-scrollbar flex-grow">
                 {selectedEmail.body}
               </div>
             </div>

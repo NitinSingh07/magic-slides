@@ -48,15 +48,28 @@ export async function classifyEmails(emails: Email[]) {
           max_tokens: 10, // Max tokens adjusted for single-word classification
         });
 
-        let classification =
-          response.choices[0].message.content?.trim() || "Important"; // Default to Important if AI fails
+        let rawClassification = response.choices[0].message.content?.trim();
+        let classification: string;
 
-        // Ensure classification is one of the allowed categories
-        if (!classificationCategories.includes(classification)) {
+        if (rawClassification) {
+          // Canonicalize the raw classification to Title Case for comparison
+          const canonicalClassification =
+            rawClassification.charAt(0).toUpperCase() +
+            rawClassification.slice(1).toLowerCase();
+
+          if (classificationCategories.includes(canonicalClassification)) {
+            classification = canonicalClassification;
+          } else {
+            console.warn(
+              `Unexpected classification received: ${rawClassification}. Defaulting to Important.`
+            );
+            classification = "Important"; // Fallback if canonicalized doesn't match
+          }
+        } else {
           console.warn(
-            `Unexpected classification received: ${classification}. Defaulting to Important.`
+            `No classification received from OpenAI. Defaulting to Important.`
           );
-          classification = "Important";
+          classification = "Important"; // Fallback if AI returns empty
         }
         console.log(`Email ${email.id} classified as: ${classification}`);
         return { ...email, classification };
