@@ -11,9 +11,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
 
+  const { searchParams } = new URL(req.url);
+  const maxResults = searchParams.get("maxResults");
+  const limit = maxResults ? parseInt(maxResults, 10) : 10; // Default to 10 if not provided or invalid
+
   try {
     console.log("Attempting to fetch emails with access token.");
-    const emails = await fetchGmailEmails(session.accessToken);
+    const emails = await fetchGmailEmails(session.accessToken, limit);
     console.log("Emails fetched successfully.", emails);
     return NextResponse.json({ emails });
   } catch (error: any) {

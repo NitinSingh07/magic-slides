@@ -2,7 +2,7 @@ import { google } from "googleapis";
 
 export async function fetchGmailEmails(
   accessToken: string,
-  maxResults: number = 15
+  maxResults?: number
 ) {
   const oAuth2Client = new google.auth.OAuth2();
   oAuth2Client.setCredentials({ access_token: accessToken });
@@ -12,7 +12,7 @@ export async function fetchGmailEmails(
   try {
     const res = await gmail.users.messages.list({
       userId: "me",
-      maxResults: maxResults,
+      maxResults: maxResults || 10, // Use maxResults if provided, otherwise default to 10
     });
 
     const messages = res.data.messages || [];

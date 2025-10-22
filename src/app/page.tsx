@@ -144,9 +144,17 @@ export default function Home() {
             <p className="text-sm text-gray-600">
               {session.user?.email || "nitinthakur4406@gmail.com"}
             </p>
-            <div className="relative flex items-center border border-black px-2 py-0.5 bg-white text-sm leading-none w-10 justify-center mt-1">
-              <span className="text-gray-800">{numberOfEmails}</span>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pl-1 text-gray-700">
+            <div className="relative mt-1">
+              <select
+                value={numberOfEmails}
+                onChange={(e) => setNumberOfEmails(Number(e.target.value))}
+                className="block appearance-none w-16 bg-white border border-black text-gray-800 py-0.5 px-2 pr-4 rounded-none leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-sm"
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <svg
                   className="fill-current h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"
