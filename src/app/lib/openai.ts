@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { stripHtml } from "string-strip-html"; // Install using: npm i string-strip-html
 
 interface Email {
   id: string;
@@ -16,66 +17,69 @@ export async function classifyEmails(emails: Email[]) {
   const classifiedEmails = await Promise.all(
     emails.map(async (email) => {
       try {
-        const prompt = `Classify the following email into one of these categories: ${classificationCategories.join(
-          ", "
-        )}. Your response MUST be one of these words: Important, Marketing, Spam. If the email content strongly suggests one category over others, choose that one. Otherwise, try to infer the most likely category. DO NOT use any other words, punctuation, or formatting. 
+        // Clean and limit email body for better classification context
+        const cleanBody = stripHtml(email.body || "").result.slice(0, 1000);
 
-        Here are examples:
+        const prompt = `
+You are an expert email classifier. Your task is to categorize the following email into ONE and ONLY ONE of these categories: Important, Marketing, or Spam. 
 
-        Example 1:
-        Email Subject: Your Order Has Shipped - Urgent Action Required
-        Email Body: Hi, your order with tracking number XYZ has shipped. Please review details immediately.
-        Classification: Important
+RULES:
+- Your response MUST be a single word: Important, Marketing, or Spam.
+- If an email is clearly an advertisement, promotion, or newsletter, classify it as Marketing.
+- If an email is unsolicited, suspicious, or a phishing attempt, classify it as Spam.
+- ONLY classify as Important if it's personal communication, work-related, or requires user action.
+- DO NOT default to Important. If unsure, first check if it fits Marketing or Spam.
+- Return ONLY the category name. No punctuation, explanation, or extra text.
 
-        Example 2:
-        Email Subject: Limited Time Offer: 50% Off!
-        Email Body: Don't miss out on our new product launch. Click here to get 50% off.
-        Classification: Marketing
+EXAMPLES:
+Important: Subject: "Your flight is confirmed", Body: "Your flight from X to Y is confirmed."
+Marketing: Subject: "Flash Sale! 50% off!", Body: "Don't miss out on our limited-time offer."
+Spam: Subject: "Claim your prize!", Body: "You've won a million dollars, click here."
 
-        Example 3:
-        Email Subject: Congratulations, You've Won a Free Car!
-        Email Body: Click this suspicious link to claim your prize. This is not a scam.
-        Classification: Spam
+Email Details:
+From: ${email.from}
+Subject: ${email.subject}
+Body: ${cleanBody}
 
-        Email Subject: ${email.subject}
-        Email Body: ${email.body}
-
-        Classification:`;
+Classification:
+`;
 
         const response = await openai.chat.completions.create({
           model: "gpt-4o",
           messages: [{ role: "user", content: prompt }],
-          max_tokens: 10, // Max tokens adjusted for single-word classification
+          max_tokens: 10, // enough for a single word
+          temperature: 0, // deterministic classification
         });
 
-        let rawClassification = response.choices[0].message.content?.trim();
+        const rawClassification = response.choices[0].message.content?.trim();
         let classification: string;
 
         if (rawClassification) {
-          // Canonicalize the raw classification to Title Case for comparison
-          const canonicalClassification =
+          // Convert to Title Case for consistency
+          const canonical =
             rawClassification.charAt(0).toUpperCase() +
             rawClassification.slice(1).toLowerCase();
 
-          if (classificationCategories.includes(canonicalClassification)) {
-            classification = canonicalClassification;
+          if (classificationCategories.includes(canonical)) {
+            classification = canonical;
           } else {
             console.warn(
-              `Unexpected classification received: ${rawClassification}. Defaulting to Important.`
+              `⚠️ Unexpected classification for email ${email.id}: "${rawClassification}". Defaulting to "Important".`
             );
-            classification = "Important"; // Fallback if canonicalized doesn't match
+            classification = "Important";
           }
         } else {
           console.warn(
-            `No classification received from OpenAI. Defaulting to Important.`
+            `⚠️ No classification received for email ${email.id}. Defaulting to "Important".`
           );
-          classification = "Important"; // Fallback if AI returns empty
+          classification = "Important";
         }
-        console.log(`Email ${email.id} classified as: ${classification}`);
+
+        console.log(`✅ Email ${email.id} classified as: ${classification}`);
         return { ...email, classification };
       } catch (error) {
-        console.error(`Error classifying email ${email.id}:`, error);
-        return { ...email, classification: "Important" }; // Default to Important on error
+        console.error(`❌ Error classifying email ${email.id}:`, error);
+        return { ...email, classification: "Important" }; // fallback
       }
     })
   );
