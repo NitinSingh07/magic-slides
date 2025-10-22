@@ -108,34 +108,24 @@ export default function Home() {
 
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className=" p-8 max-w-sm w-full border border-gray-200">
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center">
           <button
             onClick={() => signIn("google")}
-            className="w-full bg-blue-600 text-white font-semibold py-3 px-6 hover:bg-blue-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            className="border border-black px-8 py-3 text-black text-lg hover:bg-gray-100 transition duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
           >
             Login with Google
           </button>
           {isClient && (
-            <>
-              <div className="relative flex py-5 items-center">
-                <div className="grow border-t border-gray-300"></div>
-                <div className="grow border-t border-gray-300"></div>
-              </div>
+            <div className="mt-4 flex flex-col items-center">
               <input
                 type="password"
                 value={openaiApiKey}
                 onChange={(e) => setOpenaiApiKey(e.target.value)}
-                placeholder="Enter OpenAI API Key"
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-300 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter OpenAI API"
+                className="px-8 py-3 border border-black text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-opacity-50"
               />
-              <button
-                onClick={handleApiKeySave}
-                className="w-full bg-green-600 text-white font-semibold py-3 px-6  hover:bg-green-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4"
-              >
-                Enter OpenAI Key
-              </button>
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -149,10 +139,10 @@ export default function Home() {
           <div className="h-8 w-8 rounded-full border border-black flex items-center justify-center bg-white"></div>
           <div className="flex flex-col items-start">
             <p className="font-bold text-gray-900">
-              {session.user?.name || "Deadpool"}
+              {session.user?.name || "Nitin Thakur"}
             </p>
             <p className="text-sm text-gray-600">
-              {session.user?.email || "peterparker@marvel.com"}
+              {session.user?.email || "nitinthakur4406@gmail.com"}
             </p>
             <div className="relative flex items-center border border-black px-2 py-0.5 bg-white text-sm leading-none w-10 justify-center mt-1">
               <span className="text-gray-800">{numberOfEmails}</span>
@@ -173,7 +163,7 @@ export default function Home() {
           onClick={() => signOut()}
           className="border border-black px-4 py-2 text-gray-800 bg-white hover:bg-gray-100 transition duration-200"
         >
-          Login/Logout
+          Logout
         </button>
       </header>
 
@@ -218,36 +208,30 @@ export default function Home() {
       {/* Right-to-left sliding email detail popup */}
       {selectedEmail && (
         <div
-          className={`fixed inset-y-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-white border-l border-black shadow-lg transform transition-transform duration-300 ease-in-out ${
+          className={`fixed inset-y-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-gray-100 border-l border-black shadow-lg transform transition-transform duration-300 ease-in-out ${
             selectedEmail ? "translate-x-0" : "translate-x-full"
           }`}
+          onClick={() => setSelectedEmail(null)} // Close on outside click
         >
-          <div className="p-4">
-            <button
-              onClick={() => setSelectedEmail(null)}
-              className="absolute top-2 left-2 text-gray-800 hover:text-gray-900 border border-black px-2 py-1 bg-white"
-            >
-              Close
-            </button>
-            <div className="mt-10">
+          <div
+            className="p-4 relative"
+            onClick={(e) => e.stopPropagation()} // Prevent click from closing popup
+          >
+            {/* Removed Close button */}
+            <div className="mt-2">
               <div className="flex justify-between items-center mb-2">
                 <h2 className="font-bold text-base text-gray-900">
-                  {selectedEmail.from}
+                  {selectedEmail.classification}
                 </h2>
-                {selectedEmail.classification && (
-                  <span
-                    className={`px-1 py-0.5 text-xs font-normal ${getClassificationColor(
-                      selectedEmail.classification
-                    )} whitespace-nowrap border border-black`}
-                  >
-                    {selectedEmail.classification}
-                  </span>
-                )}
+                {/* Removed classification span as it's now the header */}
               </div>
               <p className="text-sm text-gray-700 leading-tight mb-2">
-                {selectedEmail.subject}
+                From: {selectedEmail.from}
               </p>
-              <div className="p-2 border border-black overflow-y-auto max-h-96 text-sm text-gray-800 whitespace-pre-wrap">
+              <p className="text-sm text-gray-700 leading-tight mb-2">
+                Subject: {selectedEmail.subject}
+              </p>
+              <div className="p-2 border border-black text-sm text-gray-800 whitespace-pre-wrap overflow-y-auto overflow-x-hidden h-[60vh] custom-scrollbar">
                 {selectedEmail.body}
               </div>
             </div>

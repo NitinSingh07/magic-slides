@@ -18,12 +18,29 @@ export async function classifyEmails(emails: Email[]) {
       try {
         const prompt = `Classify the following email into one of these categories: ${classificationCategories.join(
           ", "
-        )}. Respond with only the classification word and nothing else.
+        )}. Your response MUST be one of these words: Important, Marketing, Spam. If the email content strongly suggests one category over others, choose that one. Otherwise, try to infer the most likely category. DO NOT use any other words, punctuation, or formatting. 
 
-Email Subject: ${email.subject}
-Email Body: ${email.body}
+        Here are examples:
 
-Classification:`;
+        Example 1:
+        Email Subject: Your Order Has Shipped - Urgent Action Required
+        Email Body: Hi, your order with tracking number XYZ has shipped. Please review details immediately.
+        Classification: Important
+
+        Example 2:
+        Email Subject: Limited Time Offer: 50% Off!
+        Email Body: Don't miss out on our new product launch. Click here to get 50% off.
+        Classification: Marketing
+
+        Example 3:
+        Email Subject: Congratulations, You've Won a Free Car!
+        Email Body: Click this suspicious link to claim your prize. This is not a scam.
+        Classification: Spam
+
+        Email Subject: ${email.subject}
+        Email Body: ${email.body}
+
+        Classification:`;
 
         const response = await openai.chat.completions.create({
           model: "gpt-4o",
