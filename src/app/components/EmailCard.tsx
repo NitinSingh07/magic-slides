@@ -19,6 +19,8 @@ const getClassificationColor = (classification?: string) => {
       return "bg-orange-500"; // Orange for Marketing
     case "spam":
       return "bg-gray-500"; // Gray for Spam
+    case "general":
+      return "bg-gray-400"; // Lighter gray for General, as in mockup
     default:
       return "bg-gray-500"; // Default neutral color
   }
@@ -29,26 +31,26 @@ export default function EmailCard({ email, onEmailSelect }: EmailCardProps) {
 
   return (
     <div
-      className="bg-gray-800 p-5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-700"
+      className="bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-200"
       onClick={() => onEmailSelect(email)}
     >
-      <div className="flex justify-between items-start mb-4">
-        <h3 className="font-bold text-lg text-white truncate pr-4">
+      <div className="flex justify-between items-start mb-2">
+        <h3 className="font-semibold text-base text-gray-900 pr-2">
           {email.subject}
         </h3>
         {email.classification && (
           <span
-            className={`px-3 py-1 rounded-full text-xs font-semibold ${classificationColor} text-white shadow-md`}
+            className={`px-2 py-0.5 rounded-full text-xs font-medium ${classificationColor} text-white whitespace-nowrap`}
           >
             {email.classification}
           </span>
         )}
       </div>
-      <p className="text-sm text-gray-400 mb-3 font-medium">
-        From: {email.from}
+      <p className="text-sm text-gray-600 mb-2">
+        From: <span className="font-medium">{email.from}</span>
       </p>
-      <p className="text-base text-gray-300 line-clamp-3 leading-relaxed">
-        {email.body.substring(0, 150)}...
+      <p className="text-sm text-gray-700 line-clamp-2">
+        {email.body.substring(0, 100)}...
       </p>
     </div>
   );

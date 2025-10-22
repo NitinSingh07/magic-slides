@@ -101,33 +101,28 @@ export default function Home() {
 
   if (!session) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900">
-        <div className="bg-gray-800 p-10 rounded-lg shadow-2xl text-center max-w-lg w-full transform hover:scale-105 transition-transform duration-300">
-          <h1 className="text-5xl font-extrabold mb-6 text-white tracking-tight">
-            MagicSlides
-          </h1>
-          <p className="text-lg text-gray-300 mb-8">
-            Your smart email classifier. Please log in to get started.
-          </p>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="bg-white p-10 rounded-lg shadow-xl text-center max-w-lg w-full transform transition-transform duration-300">
+          {/* Removed h1 and p as per mockup */}
           <button
             onClick={() => signIn("google")}
-            className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+            className="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
           >
             Login with Google
           </button>
           {isClient && (
             <>
-              <div className="mt-4 text-gray-400">OR</div>
+              <div className="mt-4 text-gray-600">OR</div>
               <input
                 type="password"
                 value={openaiApiKey}
                 onChange={(e) => setOpenaiApiKey(e.target.value)}
                 placeholder="Enter OpenAI API KEY"
-                className="w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 mt-4"
+                className="w-full p-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 mt-4"
               />
               <button
                 onClick={handleApiKeySave}
-                className="w-full bg-green-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-4"
+                className="w-full bg-green-500 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-green-400 mt-4"
               >
                 Save API Key
               </button>
@@ -139,31 +134,32 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6 sm:p-10 font-sans">
-      <header className="flex justify-between items-center py-4 px-6 bg-gray-800 shadow-md">
-        <h1 className="text-2xl font-bold text-white">Email Classifier</h1>
+    <div className="min-h-screen bg-white text-gray-900 font-sans">
+      <header className="flex justify-between items-center py-4 px-6 bg-white shadow-md border-b border-gray-200">
+        <h1 className="text-2xl font-bold text-gray-900">Email Classifier</h1>
         <div className="flex items-center space-x-4">
-          <span className="text-gray-300">
+          <span className="text-gray-700 font-medium">
             Standpoint {session.user?.email}
           </span>
           <button
             onClick={() => signOut()}
-            className="bg-red-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-700 transition duration-300"
+            className="bg-red-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-red-600 transition duration-300"
           >
             Sign out
           </button>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto flex mt-8">
-        <div className="w-full lg:w-2/3 pr-6">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-xl font-bold mb-4 text-white">Settings</h2>
+      <main className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="lg:col-span-2">
+          <div className="bg-white p-6 rounded-lg shadow-md mb-6 border border-gray-200">
+            <h2 className="text-xl font-bold mb-4 text-gray-900">Settings</h2>
             <div className="space-y-4 mb-6">
+              {/* Changed from grid to space-y for single column */}
               <div>
                 <label
                   htmlFor="numEmails"
-                  className="block text-gray-300 text-sm font-bold mb-2"
+                  className="block text-gray-700 text-sm font-bold mb-2"
                 >
                   Select number of emails to classify:
                 </label>
@@ -171,7 +167,7 @@ export default function Home() {
                   id="numEmails"
                   value={numberOfEmails}
                   onChange={(e) => setNumberOfEmails(Number(e.target.value))}
-                  className="block w-full p-3 rounded-md bg-gray-700 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="block w-full p-3 rounded-md bg-gray-100 border border-gray-300 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -179,6 +175,7 @@ export default function Home() {
                   <option value={20}>20</option>
                 </select>
               </div>
+              {/* Removed OpenAI API Key input and Save Key button */}
             </div>
             <div className="flex flex-col space-y-4">
               <button
@@ -250,31 +247,31 @@ export default function Home() {
             <EmailList emails={emails} onEmailSelect={handleEmailSelect} />
           )}
         </div>
-        <div className="w-full lg:w-1/3 pl-6">
+        <div className="lg:col-span-1">
           {/* Side panel for detailed email view */}
-          <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-            <h2 className="text-xl font-bold mb-3 text-white">
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+            <h2 className="text-xl font-bold mb-3 text-gray-900">
               Selected Email
             </h2>
             {selectedEmail ? (
               <div>
-                <p className="text-gray-300">From: {selectedEmail.from}</p>
-                <p className="text-gray-300">
+                <p className="text-gray-700">From: {selectedEmail.from}</p>
+                <p className="text-gray-700">
                   Subject: {selectedEmail.subject}
                 </p>
                 {selectedEmail.classification && (
-                  <p className="text-gray-300">
+                  <p className="text-gray-700">
                     Classification: {selectedEmail.classification}
                   </p>
                 )}
-                <div className="mt-4 p-4 bg-gray-700 rounded-md max-h-96 overflow-y-auto">
-                  <p className="text-gray-200 whitespace-pre-wrap">
+                <div className="mt-4 p-4 bg-gray-100 rounded-md max-h-96 overflow-y-auto border border-gray-200">
+                  <p className="text-gray-800 whitespace-pre-wrap">
                     {selectedEmail.body}
                   </p>
                 </div>
               </div>
             ) : (
-              <p className="text-gray-400">
+              <p className="text-gray-500">
                 Click on an email to view its full content here.
               </p>
             )}
@@ -283,27 +280,25 @@ export default function Home() {
       </main>
 
       {error && (
-        <div className="fixed bottom-0 left-0 right-0 bg-red-800 text-white px-5 py-3 flex items-center justify-between shadow-lg">
-          <div className="flex items-center">
-            <svg
-              className="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-              />
-            </svg>
-            <strong className="font-bold">1 Issue:</strong>
-            <span className="block sm:inline ml-2">{error}</span>
-          </div>
+        <div className="absolute bottom-4 left-4 bg-red-600 text-white px-4 py-2 rounded-full shadow-lg flex items-center space-x-2">
+          <svg
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+          <strong className="font-bold">N</strong>
+          <span className="ml-1 text-sm">1 Issue</span>
           <button
             onClick={() => setError(null)}
-            className="text-white opacity-75 hover:opacity-100 focus:outline-none"
+            className="ml-2 text-white opacity-75 hover:opacity-100 focus:outline-none"
           >
             X
           </button>
