@@ -208,31 +208,35 @@ export default function Home() {
       {/* Right-to-left sliding email detail popup */}
       {selectedEmail && (
         <div
-          className={`fixed inset-y-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-gray-100 border-l border-black shadow-lg transform transition-transform duration-300 ease-in-out ${
-            selectedEmail ? "translate-x-0" : "translate-x-full"
+          className={`fixed inset-0 bg-opacity-50 z-40 transition-opacity duration-300 ${
+            selectedEmail ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
           onClick={() => setSelectedEmail(null)} // Close on outside click
         >
           <div
-            className="p-4 relative h-full"
+            className={`fixed inset-y-0 right-0 w-full md:w-1/2 lg:w-1/3 bg-gray-100 border-l border-black shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${
+              selectedEmail ? "translate-x-0" : "translate-x-full"
+            }`}
             onClick={(e) => e.stopPropagation()} // Prevent click from closing popup
           >
-            {/* Removed Close button */}
-            <div className="mt-2 flex flex-col h-full">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="font-bold text-base text-gray-900">
-                  {selectedEmail.classification}
-                </h2>
-                {/* Removed classification span as it's now the header */}
-              </div>
-              <p className="text-sm text-gray-700 leading-tight mb-2">
-                From: {selectedEmail.from}
-              </p>
-              <p className="text-sm text-gray-700 leading-tight mb-2">
-                Subject: {selectedEmail.subject}
-              </p>
-              <div className="text-sm text-gray-800 whitespace-pre-wrap overflow-y-auto overflow-x-hidden custom-scrollbar flex-grow">
-                {selectedEmail.body}
+            <div className="p-4 relative h-full">
+              {/* Removed Close button */}
+              <div className="mt-2 flex flex-col h-full">
+                <div className="flex justify-between items-center mb-2">
+                  <h2 className="font-bold text-base text-gray-900">
+                    {selectedEmail.classification}
+                  </h2>
+                  {/* Removed classification span as it's now the header */}
+                </div>
+                <p className="text-sm text-gray-700 leading-tight mb-2">
+                  From: {selectedEmail.from}
+                </p>
+                <p className="text-sm text-gray-700 leading-tight mb-2">
+                  Subject: {selectedEmail.subject}
+                </p>
+                <div className="text-sm text-gray-800 whitespace-pre-wrap overflow-y-auto overflow-x-hidden custom-scrollbar flex-grow">
+                  {selectedEmail.body}
+                </div>
               </div>
             </div>
           </div>
